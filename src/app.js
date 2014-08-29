@@ -17,13 +17,24 @@ var mainScreen = new UI.Menu({
     title: 'Your troops',
   }]
 });
+// setup menu items
 var ajax = require('ajax');
 ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
   function(data) {
-    console.log('Quote of the day is: ' + data.data[0].name);
-    mainScreen.items(0, [ { title: data.data[0].name } ]);
+    var count = 0;
+    console.log(data.data.length);
+    while (count < data.data.length){
+      mainScreen.item(0, count, { title: data.data[count].name } );
+      count++;
+    }
   }
 );
+
+mainScreen.on('select', function(e) {
+  console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
+  console.log('The item is titled "' + e.item.title + '"');
+});
+
 Settings.config(
   { url: 'http://haifisch.ninja/pinoccio/setup.html' },
   function(e) {
