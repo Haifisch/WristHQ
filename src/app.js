@@ -19,7 +19,7 @@ var mainScreen = new UI.Menu({
 });
 // setup menu items
 var ajax = require('ajax');
-ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
+ajax({ url: 'https://api.pinocc.io/v1/troops?token=', type: 'json' },
   function(data) {
     var count = 0;
     console.log(data.data.length);
