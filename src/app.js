@@ -7,6 +7,7 @@
 var UI = require('ui');
 var ajax = require('ajax');
 var Settings = require('settings');
+var ScoutScreen = require('Scouts');
 
 var splashScreen = new UI.Card({ banner: 'images/Pebble_Pinoccio.png' });
 splashScreen.show();
@@ -14,12 +15,11 @@ splashScreen.show();
 var mainScreen = new UI.Menu({
   
   sections: [{
-    title: 'Your troops',
+    title: 'Your Troops',
   }]
 });
 // setup menu items
-var ajax = require('ajax');
-ajax({ url: 'https://api.pinocc.io/v1/troops?token=', type: 'json' },
+ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
   function(data) {
     var count = 0;
     console.log(data.data.length);
@@ -29,10 +29,15 @@ ajax({ url: 'https://api.pinocc.io/v1/troops?token=', type: 'json' },
     }
   }
 );
-
 mainScreen.on('select', function(e) {
   console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
   console.log('The item is titled "' + e.item.title + '"');
+  var ajax = require('ajax');
+  ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
+    function(data) {
+        ScoutScreen.loadScouts(parseInt(data.data[e.itemIndex].id));
+    }
+  );
 });
 
 Settings.config(
