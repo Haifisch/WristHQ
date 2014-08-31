@@ -13,7 +13,6 @@ var menu = new UI.Menu({
 
 var ScoutControl = {  
   loadScout : function(troopid, scoutid,scoutname, token) {  
-    menu.show();
     troop = troopid;
     scout = scoutid;
     scoutnam = scoutname;
@@ -27,21 +26,36 @@ var ScoutControl = {
         var obj = JSON.parse(data.data.reply);
         var temp_subtitle = parseInt(obj.f) + "F / " + parseInt(obj.c) + "C";        
         menu.item(0, 0, { title: 'Temperature', subtitle: temp_subtitle});
-        menu.item(0,1, {title:"LED Settings"});
       },
       function(error) {
         console.log('The ajax request failed: ' + error);
       }
     ); 
+    console.log('https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/power.report?token='+globalToken);
+    ajax(
+      {
+        url:'https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/power.report?token='+globalToken,
+        type: 'json'
+      },
+      function(data) {
+        var obj = JSON.parse(data.data.reply);
+        menu.item(0, 1, { title: 'Battery: '+parseInt(obj.battery)+'%'});
+      },
+      function(error) {
+        console.log('The ajax request failed: ' + error);
+      }
+    );
+    menu.item(0,2, {title:"LED Settings"});
     menu.on('select', function(e) {
       switch(e.itemIndex){
-        case 1:
+        case 2:
             LEDControl.load(troop, scout, globalToken);
           break;
         default:
           break;
       }
     });
+    menu.show();
   }
 };
 
