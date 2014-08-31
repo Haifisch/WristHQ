@@ -4,7 +4,7 @@
         "configurable"
     ],
     "companyName": "laws.ra1n@me.com",
-    "longName": "Pinoccio HQ",
+    "longName": "WristHQ",
     "projectType": "pebblejs",
     "resources": {
         "media": [
@@ -36,7 +36,7 @@
             }
         ]
     },
-    "shortName": "Pinoccio HQ",
+    "shortName": "WristHQ",
     "uuid": "05b8108b-2767-4d4d-bcdd-89a15fe00ad1",
     "versionCode": 1,
     "versionLabel": "1.0",
