@@ -4,7 +4,7 @@
  * This is where you write your app.
  */
 // Remember to set this, this should be replaced soon by localStorage whenever I implement the login.
-var globalToken = "ad585460354b33f1eb2e289835df4401";
+var globalToken = "";
 //
 
 var UI = require('ui');
