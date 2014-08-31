@@ -4,7 +4,7 @@
  * This is where you write your app.
  */
 // Remember to set this, this should be replaced soon by localStorage whenever I implement the login.
-var globalToken = "";
+var globalToken = "ad585460354b33f1eb2e289835df4401";
 //
 
 var UI = require('ui');
@@ -36,8 +36,6 @@ ajax({ url: 'https://api.pinocc.io/v1/troops?token='+globalToken, type: 'json' }
   }
 );
 mainScreen.on('select', function(e) {
-  console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-  console.log('The item is titled "' + e.item.title + '"');
   var ajax = require('ajax');
   ajax({ url: 'https://api.pinocc.io/v1/troops?token='+globalToken, type: 'json' },
     function(data) {

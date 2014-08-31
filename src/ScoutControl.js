@@ -18,7 +18,6 @@ var ScoutControl = {
     scout = scoutid;
     scoutnam = scoutname;
     globalToken = token;
-    console.log('https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token='+globalToken);
     ajax(
       {
         url:'https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token='+globalToken,
@@ -27,7 +26,6 @@ var ScoutControl = {
       function(data) {
         var obj = JSON.parse(data.data.reply);
         var temp_subtitle = parseInt(obj.f) + "F / " + parseInt(obj.c) + "C";        
-        console.log(temp_subtitle);
         menu.item(0, 0, { title: 'Temperature', subtitle: temp_subtitle});
         menu.item(0,1, {title:"LED Settings"});
       },

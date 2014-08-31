@@ -1,36 +1,37 @@
 var UI = require('ui');
-var ScoutControl = require('ScoutControl');
+var ajax = require('ajax');
 
 var troop = 0;
 var scout = 0;
+var ledISON = 0;
 var globalToken;
-var ajax = require('ajax');
+
 var menu = new UI.Menu({
     sections: [{
       title: 'LED Control',
       items: [{
-        title: 'LED Toggle',
+        title: 'Turn ON',
       }]
     },{
       title: 'LED Color',
       items: [{
-        title: 'LED Cyan',
+        title: 'Cyan',
       }, {
-        title: 'LED Blue',
+        title: 'Blue',
       },{
-        title: 'LED Orange',
+        title: 'Orange',
       },{
-        title: 'LED Red',
+        title: 'Red',
       },{
-        title: 'LED Green',
+        title: 'Green',
       },{
-        title: 'LED Purple',
+        title: 'Purple',
       },{
-        title: 'LED Magenta',
+        title: 'Magenta',
       },{
-        title: 'LED Yellow',
+        title: 'Yellow',
       },{
-        title: 'LED White',
+        title: 'White',
       }]
     }]
 });
@@ -41,6 +42,7 @@ var LEDControl = {
     troop = troopid;
     scout = scoutid;
     globalToken = token;
+    ledStatus();
     menu.show();
   }
 };
@@ -87,7 +89,18 @@ menu.on('select', function(e) {
   }
   
 });
-
+function ledStatus() {  
+  console.log('https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/print%20led.isoff?token='+globalToken);
+  ajax({ url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/print%20led.isoff?token='+globalToken, type: 'json' },
+    function(data) {
+        if(parseInt(data.data.reply) == 1){
+            menu.item(0, 0, { title: "Turn ON" } );
+        }else {
+            menu.item(0, 0, { title: "Turn OFF" } );
+        }
+    }
+  );
+}
 function toggleLED() {
    ajax(
       {
@@ -103,7 +116,7 @@ function toggleLED() {
               type: 'json'
             },
             function(data) {
-              
+              menu.item(0, 0, { title: "Turn OFF" } );
             },
             function(error) {
               console.log('The ajax request failed: ' + error);
@@ -116,7 +129,7 @@ function toggleLED() {
               type: 'json'
             },
             function(data) {
-              
+              menu.item(0, 0, { title: "Turn ON" } );
             },
             function(error) {
               console.log('The ajax request failed: ' + error);
@@ -127,5 +140,5 @@ function toggleLED() {
       function(error) {
         console.log('The ajax request failed: ' + error);
       }
-    ); 
+    );
 }
