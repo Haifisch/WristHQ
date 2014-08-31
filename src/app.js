@@ -3,14 +3,20 @@
  *
  * This is where you write your app.
  */
+// Remember to set this, this should be replaced soon by localStorage whenever I implement the login.
+var globalToken = "";
+//
 
 var UI = require('ui');
 var ajax = require('ajax');
-var Settings = require('settings');
 var ScoutScreen = require('Scouts');
-
 var splashScreen = new UI.Card({ banner: 'images/Pebble_Pinoccio.png' });
 splashScreen.show();
+
+var noTokenScreen = new UI.Card({
+  title: 'Oh no!'
+});
+noTokenScreen.body('There doesn\'t appear to be any tokens stored, be sure you are logged in.');
 
 var mainScreen = new UI.Menu({
   
@@ -19,7 +25,7 @@ var mainScreen = new UI.Menu({
   }]
 });
 // setup menu items
-ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
+ajax({ url: 'https://api.pinocc.io/v1/troops?token='+globalToken, type: 'json' },
   function(data) {
     var count = 0;
     console.log(data.data.length);
@@ -33,30 +39,40 @@ mainScreen.on('select', function(e) {
   console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
   console.log('The item is titled "' + e.item.title + '"');
   var ajax = require('ajax');
-  ajax({ url: 'https://api.pinocc.io/v1/troops?token=ad585460354b33f1eb2e289835df4401', type: 'json' },
+  ajax({ url: 'https://api.pinocc.io/v1/troops?token='+globalToken, type: 'json' },
     function(data) {
-        ScoutScreen.loadScouts(parseInt(data.data[e.itemIndex].id));
+        ScoutScreen.loadScouts(parseInt(data.data[e.itemIndex].id), globalToken);
     }
   );
 });
 
-Settings.config(
-  { url: 'http://haifisch.ninja/pinoccio/setup.html' },
-  function(e) {
-    console.log('opening configurable');
+var initialized = false;
 
-    // Reset color to red before opening the webview
-    Settings.option('token', 'red');
-  },
-  function(e) {
-    console.log('closed configurable');
-  }
-);
+Pebble.addEventListener("ready", function() {
+  console.log("ready called!");
+  initialized = true;
+});
+
+Pebble.addEventListener("showConfiguration", function() {
+  console.log("showing configuration");
+  Pebble.openURL('http://haifisch.ninja/pinoccio/configurable.html');
+});
+
+Pebble.addEventListener("webviewclosed", function(e) {
+  console.log("configuration closed");
+  // webview closed
+  var options = JSON.parse(decodeURIComponent(e.response));
+  console.log("Options = " + JSON.stringify(options));
+});
 
 setTimeout(function() {
  
   // Display the mainScreen
-  mainScreen.show();
+  if(globalToken) {
+    mainScreen.show();
+  }else {
+    noTokenScreen.show();
+  }
   // Hide the splashScreen to avoid showing it when the user press Back.
   splashScreen.hide();
 }, 3000);

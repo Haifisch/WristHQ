@@ -3,6 +3,7 @@ var troop = 0;
 var scout = 0;
 var scoutnam = 0;
 var ajax = require('ajax');
+var globalToken;
 
 var menu = new UI.Menu({
     sections: [{
@@ -11,15 +12,16 @@ var menu = new UI.Menu({
 });
 
 var ScoutControl = {  
-  loadScout : function(troopid, scoutid,scoutname) {  
+  loadScout : function(troopid, scoutid,scoutname, token) {  
     menu.show();
     troop = troopid;
     scout = scoutid;
     scoutnam = scoutname;
-    console.log('https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token=ad585460354b33f1eb2e289835df4401');
+    globalToken = token;
+    console.log('https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token='+globalToken);
     ajax(
       {
-        url:'https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token=ad585460354b33f1eb2e289835df4401',
+        url:'https://api.pinocc.io/v1/'+troopid+'/'+scoutid+'/command/temperature.report?token='+globalToken,
         type: 'json'
       },
       function(data) {
@@ -49,7 +51,7 @@ var ScoutControl = {
 function toggleLED() {
    ajax(
       {
-        url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/print%20led.isoff?token=ad585460354b33f1eb2e289835df4401',
+        url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/print%20led.isoff?token='+globalToken,
         type: 'json'
       },
       function(data) {
@@ -57,7 +59,7 @@ function toggleLED() {
         if(parseInt(data.data.reply) == 1){
           ajax( 
             {
-              url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/led.on?token=ad585460354b33f1eb2e289835df4401',
+              url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/led.on?token='+globalToken,
               type: 'json'
             },
             function(data) {
@@ -70,7 +72,7 @@ function toggleLED() {
         }else {
           ajax( 
             {
-              url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/led.off?token=ad585460354b33f1eb2e289835df4401',
+              url:'https://api.pinocc.io/v1/'+troop+'/'+scout+'/command/led.off?token='+globalToken,
               type: 'json'
             },
             function(data) {
