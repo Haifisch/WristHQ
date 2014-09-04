@@ -4,7 +4,7 @@
  * This is where you write your app.
  */
 // Remember to set this, this should be replaced soon by localStorage whenever I implement the login.
-var globalToken = "";
+var globalToken = localStorage.getItem("token");
 //
 
 var UI = require('ui');
@@ -60,8 +60,11 @@ Pebble.addEventListener("webviewclosed", function(e) {
   console.log("configuration closed");
   // webview closed
   var options = JSON.parse(decodeURIComponent(e.response));
-  console.log("Options = " + JSON.stringify(options));
+  //var tokenData = JSON.stringify(options);
+  console.log(options.token);
+  localStorage.setItem("token",options.token);
 });
+
 
 setTimeout(function() {
  
