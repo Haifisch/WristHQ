@@ -3,7 +3,6 @@ var ajax = require('ajax');
 
 var troop = 0;
 var scout = 0;
-var ledISON = 0;
 var globalToken;
 
 var menu = new UI.Menu({

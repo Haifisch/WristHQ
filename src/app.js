@@ -63,6 +63,11 @@ Pebble.addEventListener("webviewclosed", function(e) {
   //var tokenData = JSON.stringify(options);
   console.log(options.token);
   localStorage.setItem("token",options.token);
+  globalToken = localStorage.getItem("token");
+  if(globalToken) {
+    mainScreen.show();
+    noTokenScreen.hide();
+  }
 });
 
 
